@@ -1,20 +1,30 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {string} from 'prop-types';
+import {string ,shape} from 'prop-types';
 
 export default function CircleButton (props){
-    const {children} = props;
+    const {children ,style } = props;
 
 
     return(
-        <View style={styles.circleButton}>
+        <View style={[styles.circleButton,style]}>
             <Text style={styles.circleButtonLabel}>{children}</Text>
         </View>
     )
 }
 
+//ここでサークルボタンのスタイルをその時に応じて自由に変えられるように、値をpropsで受け取るようにしている。
+//またその時の値は文字列ではないのでproptypeでshapeを指定している。
+//shape()という形で何も指定しなければ何でも中に入れることが出来る。
+//例えばボタンを使うスクリーンで、「style={{top :24}}」といった形で記述すると、位置に関するプロパティが更新され、上から24pxの所にボタンが配置される。
+
 CircleButton.prototype = {
     children: string.isRequired,
+    style: shape(),
+}
+
+CircleButton.defaultProps = {
+    style : null,
 }
 
 const styles = StyleSheet.create({
