@@ -1,16 +1,16 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {string ,shape} from 'prop-types';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import {string ,shape, func} from 'prop-types';
 import { Feather } from '@expo/vector-icons'; 
 
 export default function CircleButton (props){
-    const {style ,name,size, color } = props;
+    const {style ,name,size, color , onPress} = props;
 
 
     return(
-        <View style={[styles.circleButton,style]}>
+        <TouchableOpacity style={[styles.circleButton,style]}　onPress={onPress}>
             <Feather name={name} size={32} color="white" />
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -20,13 +20,20 @@ export default function CircleButton (props){
 //例えばボタンを使うスクリーンで、「style={{top :24}}」といった形で記述すると、位置に関するプロパティが更新され、上から24pxの所にボタンが配置される。
 //今回はAntDesignというモジュールをインポートしているので、AntDesign内で名前があるものはレンダリング出来るが、異なるものはレンダリング出来ない(?になる)。
 
+//更にここではボタンをクリックした時にアニメーションが起こるようにTouchableOpacityというものを使用している。
+//Nativeからインポートした後、Viewの部分にTouchableOpacityを入れる。
+//さらに受け取るPropsの中にonPressを追加する。こうすることでボタンを使う側のスクリーンでonPressを渡してTouchableOpacityを使用できる。
+//onPressで渡ってくる値は関数であり、渡す側でその処理を指定することで様々なアクションを表現している。
+
 CircleButton.prototype = {
     style: shape(),
     name: string.isRequired,
+    onPress: func,
 }
 
 CircleButton.defaultProps = {
     style : null,
+    onPress: null,
 }
 
 const styles = StyleSheet.create({
