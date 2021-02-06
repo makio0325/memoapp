@@ -1,12 +1,13 @@
 import React from 'react';
 import {View, ScrollView,Text, StyleSheet} from 'react-native';
-import AppBar from '../components/AppBar';
 import CircleButton from '../components/CircleButton';
 
-export default function MemoDetailScreen () {
+export default function MemoDetailScreen (props) {
+    const {navigation} = props;
+
     return (
         <View style={styles.container}>
-            <AppBar />
+
             <View style={styles.memoHeader}>
                 <Text style={styles.memoTitle}>買い物リスト</Text>
                 <Text style={styles.memoDate}>2020年1月1日</Text>
@@ -18,7 +19,11 @@ export default function MemoDetailScreen () {
                 本文用なので使い方を間違えると不自然に見えることもありますので要注意。
                 </Text>
             </ScrollView>
-            <CircleButton style={{top :160, buttom:'auto'}} name="edit-2" />
+            <CircleButton 
+                style={{top :60, buttom:'auto'}} 
+                name="edit-2"
+                onPress={()=> {navigation.navigate('MemoEdit');}}
+                />
         </View>
     );
 }
@@ -26,6 +31,9 @@ export default function MemoDetailScreen () {
 //本文の部分だけ普通のViewではなく、ScrollViewを使っている。
 //CircleButtonの部分でnameの文字列をCircleButtonコンポーネントに渡している。
 //CircleButtonコンポーネントはexpoのフォントアイコンを読み込んでいるので、そのnameに対応する文字列をpropsで渡すことで、アイコンを変更できる。
+
+//画面移動の際は、propsでnavigationを受け取り、onPressをも用いてルーティングのような形で画面を移動させている。
+//具体的には、「navigation.navigate('移動先のscreen名')」と記述する。
 
 
 const styles = StyleSheet.create({
