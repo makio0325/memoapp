@@ -1,18 +1,35 @@
-import React from 'react';
+import React,{useState}from 'react';
 import {Text, TextInput, View ,StyleSheet,TouchableOpacity} from 'react-native';
 
 import Button from '../components/Button'
 
 export default function LogInScreen (props){
     const {navigation} = props;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
 
                 <Text style={styles.title}>Log In</Text>
-                <TextInput style={styles.input} value="Mail Address"/>
-                <TextInput style={styles.input} value="Password"/>
+                <TextInput 
+                    style={styles.input} 
+                    value={email} 
+                    onChangeText={(text)=>{setEmail(text);}}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    placeholder="Email Address"
+                    textContentType="emailAddress"
+                />
+                <TextInput 
+                    style={styles.input} 
+                    value={password}
+                    onChangeText={(text)=>{setPassword(text);}}
+                    autoCapitalize="none"
+                    placeholder="Password"
+                    textContentType="password"
+                />
 
                 <Button 
                     label="Submit"
@@ -48,6 +65,8 @@ export default function LogInScreen (props){
 //submit部分で用いているresetメソッドは、現在のナビゲーションの履歴がどういう状態であれ、
 //route以降のオブジェクトで上書きをする、というもの。これを行うことによって、「MemoListの前のページがLoginであったという履歴」が上書きされる。
 //LogIn画面の戻れなくなれば、Backボタンは表示されなくなる。
+
+//autoCapitalize="none"の部分で、最初の文字が大文字にならないように設定している。
 
 const styles = StyleSheet.create({
     container :{
