@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useState} from 'react';
 import {View , StyleSheet, Alert} from 'react-native';
 import firebase from 'firebase';
 
@@ -10,6 +10,8 @@ import LogOutButton from '../components/LogOutButton';
 
 export default function MemoListScreen(props){
     const {navigation} = props;
+    const [memos, setMemos] =useState([]);
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -24,9 +26,18 @@ export default function MemoListScreen(props){
         if (currentUser) {
             const ref = db.collection(`users/${currentUser.uid}/memos`).orderBy('updatedAt', 'desc');
             unsubscribe = ref.onSnapshot((snapshot) => {
+                const userMemos = [];
                 snapshot.forEach((doc) => {
                     console.log(doc.id,doc.data());
-            });
+                    const data = doc.data();
+
+                    userMemos.push({
+                        id: doc.id,
+                        bodyText: data.bodyText,
+                        updatedAt: data.updatedAt.toDate(),
+                    })
+                });
+                setMemos(userMemos);
             },(error) => {
                 console.log(error);
                 Alert,alert('データの読み込みに失敗しました。');
@@ -34,18 +45,6 @@ export default function MemoListScreen(props){
         }
         return unsubscribe;
     },[]);
-
-    return (
-
-    <View style={styles.container}>
-
-        <MemoList />
-        <MemoList />
-        <MemoList />
-        <CircleButton name="plus" onPress={()=> {navigation.navigate('MemoCreate');}}/>
-    </View>
-    );
-}
 
 //navigation.setOptionsでログアウトボタンを設定しており、オプションの一部として、ログアウトボタンを指定している。
 //headerRight以降は元々は、「() => {return <LogOutButton />}」となるが、省略した書き方になっている。
@@ -55,6 +54,24 @@ export default function MemoListScreen(props){
 //const ref = db.collection(`users/${currentUser.uid}/memos`) → ログイン中のユーザーのmemosまでのレファレンスをrefに格納。
 //ref.onSnapshot以降 → メモのリストの監視。snapshotにはメモのリストに関する情報(配列)が入っている。それをforEachで繰り返し表示する。
 //さらにforeachもコールバック関数を設定できるので、一旦console.logでidとデータの中身を出力している。
+
+//userMemosのからの配列にデータを入れていくために、forEachで取り出したデータを、「data」にまず格納し、
+//さらにに入れていく配列をuserMemos.pushの部分で1つずつ指定している。
+//forEachが終わった後にsetMemosをuserMemosを引数として実行し、stateを更新している。
+
+
+    return (
+
+    <View style={styles.container}>
+
+        <MemoList memos={memos}/>
+        <CircleButton name="plus" onPress={()=> {navigation.navigate('MemoCreate');}}/>
+    </View>
+    );
+}
+
+//returnより上の処理で更新されている状態のmemosを取得しているので、それをMemoListに渡している。
+
 
 const styles = StyleSheet.create({
     container: {
