@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Text, TextInput, View ,StyleSheet,TouchableOpacity} from 'react-native';
+import {Text, TextInput, View ,StyleSheet,TouchableOpacity,Alert} from 'react-native';
+import firebase from 'firebase';
 
 import Button from '../components/Button'
 
@@ -8,6 +9,27 @@ export default function SignUpScreen (props){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+
+function handelePress(){
+        firebase.auth().createUserWithEmailAndPassword(email,password)
+            .then((userCredentioal)=>{
+                const {user} = userCredentioal;
+
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'MemoList'}],
+                    });
+            })
+            .catch((error)=>{
+                console.log(error.code, error.message);
+                Alert.alert(error.code)
+            });
+}
+
+//この関数はもともとButton内に記述していたが長くなるので切り出した部分。
+//firebase.auth().createUserWithEmailAndPassword というメソッドを引数を(email,password)として実行している
+//それが成功したらuserCredentioal を受け取る事が出来るので、それをuserに格納している。加えてnavigationも発火する。
+//成功しなかった場合はコンソールにエラーメッセージを出力するようになっている。こちらにはnavigationが発火しないので、画面も動かない。
 
 
     return (
@@ -29,18 +51,14 @@ export default function SignUpScreen (props){
                     value={password}
                     onChangeText={(text)=>{setPassword(text);}}
                     autoCapitalize="none"
+                    secureTextEntry
                     placeholder="Password"
                     textContentType="password"
                 />
 
                 <Button 
                     label="Submit"
-                    onPress={()=>{
-                        navigation.reset({
-                        index: 0,
-                        routes: [{name: 'MemoList'}],
-                        });
-                    }}
+                    onPress={handelePress}
                     />
 
                 <View style={styles.footer}>

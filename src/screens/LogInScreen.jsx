@@ -27,6 +27,7 @@ export default function LogInScreen (props){
                     value={password}
                     onChangeText={(text)=>{setPassword(text);}}
                     autoCapitalize="none"
+                    secureTextEntry
                     placeholder="Password"
                     textContentType="password"
                 />
