@@ -1,22 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View ,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View ,TouchableOpacity,Alert} from 'react-native';
 import {Feather} from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
 
 export default function MemoList () {
+    const navigation = useNavigation();
+
     return (
         <View>
-            <View style={styles.memoListItem}>
+            <TouchableOpacity 
+                style={styles.memoListItem}
+                onPress={()=>{navigation.navigate('MemoDetail');}}
+                >
                 <View>
                     <Text style={styles.memoListZItemTitle}>買い物リスト</Text>
                     <Text style={styles.memoListZItemDate}>2020年1月31日 12:00</Text>
                 </View>
-                <TouchableOpacity>
-                    <Feather name="x" size={16} color="#B0B0B0"/>
+                <TouchableOpacity onPress={()=>{Alert.alert('deleted');}}>
+                    <Feather name="x" size={32} color="#B0B0B0"/>
                 </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 }
+
+//MemoListはスクリーンではなくコンポーネント(つまり子要素)であるため、Navgaitonをが自動で読み込まれないようになっている。
+//なので、useNavigationをインポートして、その実行結果をnavigationに代入することで、スクリーンと同じような記述をすることが出来るようになっている。
 
 const styles = StyleSheet.create({
     memoListItem:{

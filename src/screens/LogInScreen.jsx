@@ -16,13 +16,24 @@ export default function LogInScreen (props){
 
                 <Button 
                     label="Submit"
-                    onPress={()=>{navigation.navigate('MemoList');}}
-                    />
+                    onPress={()=>{
+                        navigation.reset({
+                        index: 0,
+                        routes: [{name: 'MemoList'}],
+                        });
+                    }}
+                />
 
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>Not registered?</Text>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={()=>{
+                            navigation.reset({
+                                index: 0,
+                                routes: [{name: 'SignUp'}],
+                        });
+                    }}>
                         <Text style={styles.footerLink} >Sign Up here!</Text>
                     </TouchableOpacity>
 
@@ -33,6 +44,10 @@ export default function LogInScreen (props){
         </View>
     );
 }
+
+//submit部分で用いているresetメソッドは、現在のナビゲーションの履歴がどういう状態であれ、
+//route以降のオブジェクトで上書きをする、というもの。これを行うことによって、「MemoListの前のページがLoginであったという履歴」が上書きされる。
+//LogIn画面の戻れなくなれば、Backボタンは表示されなくなる。
 
 const styles = StyleSheet.create({
     container :{
