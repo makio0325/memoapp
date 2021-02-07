@@ -1,4 +1,4 @@
-import React,{useState}from 'react';
+import React,{useState, useEffect}from 'react';
 import {Text, TextInput, View ,StyleSheet,TouchableOpacity,Alert} from 'react-native';
 import firebase from 'firebase';
 
@@ -9,6 +9,25 @@ export default function LogInScreen (props){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    useEffect(()=>{
+        const unsubscribe = firebase.auth().onAuthStateChanged((user)=>{
+            if (user) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'MemoList'}],
+                });
+            }
+        });
+        return unsubscribe;
+    },[]);
+
+//このuseEffectでは、「onAuthStateChanged」でユーザーの状態を監視しており、
+//もしそのユーザーがログインしていれば、画面移動履歴をリセットした上で、MemoListにすぐに接続するようになっている。
+//最後に[]を入れている理由は、「それがないとコールバック関数がpropsが更新される度に(正確にはレンダリングの度に)実行されてしまうから」である。
+//これを入れておけば画面が表示された一回目だけにコールバック関数が実行される。[]の中には任意の監視しておきたい値を入れておくことも出来るが、今回は特に無いので空にしてある。
+
+//const unsubscribeとしているのは、「useEffectは『return 関数名』と記述することで、任意のタイミングでその関数の実行をキャンセル出来る」ようになっており、それを書きやすくするため。
+//今回はユーザーのログイン状態監視処理をキャンセルしている。(MemoListに画面が移った後はログイン情報を監視する必要が無いため)
 
     function handlePress(){
         firebase.auth().signInWithEmailAndPassword(email,password)
