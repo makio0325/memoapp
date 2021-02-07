@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator,CardStyleInterpolators} from '@react-navigation/stack';
+import firebase from 'firebase';
 
 //CardStyleInterpolatorsは大文字始まり・複数形なので注意。
 //異なるOSでのアニメーション統一を行うためのもの。
@@ -16,6 +17,23 @@ import MemoDetailScreen from './src/screens/MemoDetailScreen';
 
 
 const Stack = createStackNavigator();
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArlFVCXxSl7VwMxTRCCf6YUPuuhkx-FAY",
+  authDomain: "memoapp-ac437.firebaseapp.com",
+  projectId: "memoapp-ac437",
+  storageBucket: "memoapp-ac437.appspot.com",
+  messagingSenderId: "684078263361",
+  appId: "1:684078263361:web:f7dc65e0716c5a1fa5aac0",
+  measurementId: "G-7PYPBQ1WT4"
+};
+
+if (firebase.apps.length === 0 ) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+//↑のConfigはfirebaseのサイトからコピーしてきた内容。
+//initializeAppは初期化処理。既に初期化されていれば何もしない。
 
 export default function App() {
   return (
