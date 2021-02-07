@@ -3,6 +3,7 @@ import {View, StyleSheet, TextInput,KeyboardAvoidingView} from 'react-native';
 import firebase from 'firebase';
 
 import CircleButton from '../components/CircleButton';
+import KeyboardSafeView from '../components/KeyboardSafeView'
 
 export default function MemoCreateScreen(props) {
     const {navigation} = props;
@@ -28,7 +29,7 @@ export default function MemoCreateScreen(props) {
     }
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior='height'>
+        <KeyboardSafeView style={styles.container} >
             <View style={styles.inputContainer}>
                 <TextInput 
                     value={bodyText} 
@@ -42,7 +43,7 @@ export default function MemoCreateScreen(props) {
                 name="check"
                 onPress={handlePress}
                 />
-        </KeyboardAvoidingView>
+        </KeyboardSafeView>
     );
 }
 
