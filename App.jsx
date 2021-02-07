@@ -15,18 +15,9 @@ import MemoCreateScreen from './src/screens/MemoCreateScreen';
 import MemoEditScreen from './src/screens/MemoEditScreen';
 import MemoDetailScreen from './src/screens/MemoDetailScreen';
 
+import {firebaseConfig} from './env';
 
 const Stack = createStackNavigator();
-
-const firebaseConfig = {
-  apiKey: "AIzaSyArlFVCXxSl7VwMxTRCCf6YUPuuhkx-FAY",
-  authDomain: "memoapp-ac437.firebaseapp.com",
-  projectId: "memoapp-ac437",
-  storageBucket: "memoapp-ac437.appspot.com",
-  messagingSenderId: "684078263361",
-  appId: "1:684078263361:web:f7dc65e0716c5a1fa5aac0",
-  measurementId: "G-7PYPBQ1WT4"
-};
 
 if (firebase.apps.length === 0 ) {
   firebase.initializeApp(firebaseConfig);

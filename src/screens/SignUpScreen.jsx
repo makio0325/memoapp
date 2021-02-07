@@ -14,6 +14,7 @@ function handelePress(){
         firebase.auth().createUserWithEmailAndPassword(email,password)
             .then((userCredentioal)=>{
                 const {user} = userCredentioal;
+                console.log(user.uid);
 
                 navigation.reset({
                     index: 0,
