@@ -17,14 +17,16 @@ import MemoDetailScreen from './src/screens/MemoDetailScreen';
 
 import {firebaseConfig} from './env';
 
-const Stack = createStackNavigator();
+require('firebase/firestore')
 
 if (firebase.apps.length === 0 ) {
   firebase.initializeApp(firebaseConfig);
 }
 
-//↑のConfigはfirebaseのサイトからコピーしてきた内容。
+//↑のConfigはfirebaseのサイトからコピーしてきた内容。envから参照している。
 //initializeAppは初期化処理。既に初期化されていれば何もしない。
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
