@@ -13,7 +13,7 @@ export default function MemoList (props) {
             <TouchableOpacity 
                 
                 style={styles.memoListItem}
-                onPress={()=>{navigation.navigate('MemoDetail');}}
+                onPress={()=>{navigation.navigate('MemoDetail',{id: item.id});}}
                 >
                 <View>
                     <Text style={styles.memoListItemTitle} numberOfLines={1}>{item.bodyText}</Text>
@@ -28,6 +28,7 @@ export default function MemoList (props) {
     }
 
 //テキストのタイトル部分は、何もプロパティを設定しないと、入力した文字全てが表示されてしまうが、numberOfLines={1}と書いて表示される行数をしているすることでそれを回避することが出来る。
+//MemoDetailに情報を渡すために、ナビゲーション時に{id: item.id}を渡している。
 
     return (
         <View>

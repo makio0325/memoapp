@@ -1,9 +1,14 @@
 import React from 'react';
+import { shape, string} from 'prop-types';
 import {View, ScrollView,Text, StyleSheet} from 'react-native';
 import CircleButton from '../components/CircleButton';
 
 export default function MemoDetailScreen (props) {
-    const {navigation} = props;
+    const {navigation, route} = props;
+    const {id} = route.params;
+
+    //routeは前の画面(MemoList)からidを受け取るためのもの。
+    //routeの中にはparamsが入っており、更にその中にidが入っている。
 
     return (
         <View style={styles.container}>
@@ -35,6 +40,12 @@ export default function MemoDetailScreen (props) {
 //画面移動の際は、propsでnavigationを受け取り、onPressをも用いてルーティングのような形で画面を移動させている。
 //具体的には、「navigation.navigate('移動先のscreen名')」と記述する。
 
+
+MemoDetailScreen.prototype = {
+    route: shape({
+        params: shape({ id: string}),
+    }).isRequired,
+}
 
 const styles = StyleSheet.create({
     container: {
