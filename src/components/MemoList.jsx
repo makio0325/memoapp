@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View ,TouchableOpacity,Alert} from 'react-native';
+import { StyleSheet, Text, View ,TouchableOpacity,Alert,FlatList} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import { shape, string, instanceOf, arrayOf } from 'prop-types';
@@ -8,24 +8,34 @@ export default function MemoList (props) {
     const { memos } = props;
     const navigation = useNavigation();
 
-    return (
-        <View>
-            {memos.map((memo) => (
-                <TouchableOpacity 
-                    key={memo.id}
-                    style={styles.memoListItem}
-                    onPress={()=>{navigation.navigate('MemoDetail');}}
+    function renderItem ({item}) {
+        return(
+            <TouchableOpacity 
+                
+                style={styles.memoListItem}
+                onPress={()=>{navigation.navigate('MemoDetail');}}
                 >
                 <View>
-                    <Text style={styles.memoListItemTitle}>{memo.bodyText}</Text>
-                    <Text style={styles.memoListItemDate}>{String(memo.updatedAt)}</Text>
+                    <Text style={styles.memoListItemTitle} numberOfLines={1}>{item.bodyText}</Text>
+                    <Text style={styles.memoListItemDate}>{String(item.updatedAt)}</Text>
                 </View>
                 <TouchableOpacity onPress={()=>{Alert.alert('deleted');}}>
                     <Feather name="x" size={32} color="#B0B0B0"/>
                 </TouchableOpacity>
             </TouchableOpacity>
-            ))}
             
+        )
+    }
+
+//テキストのタイトル部分は、何もプロパティを設定しないと、入力した文字全てが表示されてしまうが、numberOfLines={1}と書いて表示される行数をしているすることでそれを回避することが出来る。
+
+    return (
+        <View>
+            <FlatList 
+                data={memos}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+            />
         </View>
     );
 }
@@ -33,6 +43,11 @@ export default function MemoList (props) {
 //MemoListはスクリーンではなくコンポーネント(つまり子要素)であるため、Navgaitonをが自動で読み込まれないようになっている。
 //なので、useNavigationをインポートして、その実行結果をnavigationに代入することで、スクリーンと同じような記述をすることが出来るようになっている。
 //memos.map((memo) => の部分は、実際は (memo) => {return ~}という記載だが、returnは省略して書いてある。
+
+//元々はreturn後にmapメソッドを使って繰り返し表示を行っていたが、FlatListを使ったレンダリングを現在は実装している。
+//FlatList内では、元となるデータはdata、レンダリング対象自体はrenderItemで定義している。keyExtractorでitemを引数として、return item.id;としている(?)
+//keyExtractor={(item) => {return item.id;}}を省略して、keyExtractor={(item) => item.id}と書いている。
+//renderItemの中に実際に表示したい構造体を返すという流れ。FlatListを使えば勝手に繰り返し表示・スクロール機能が追加されている＋メモリが節約出来るので便利。
 
 MemoList.propTypes = {
     memos: arrayOf(shape({
