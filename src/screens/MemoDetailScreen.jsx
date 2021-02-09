@@ -1,27 +1,47 @@
-import React from 'react';
+import React, {useEffect , useState}from 'react';
 import { shape, string} from 'prop-types';
 import {View, ScrollView,Text, StyleSheet} from 'react-native';
 import CircleButton from '../components/CircleButton';
+import firebase from 'firebase';
 
 export default function MemoDetailScreen (props) {
     const {navigation, route} = props;
     const {id} = route.params;
+    const [memo, setMemo] = useState(null);
 
     //routeは前の画面(MemoList)からidを受け取るためのもの。
     //routeの中にはparamsが入っており、更にその中にidが入っている。
+
+
+    useEffect (() => {
+        const {currentUser} = firebase.auth();
+        let unsubscribe =() => {};
+        if (currentUser) {
+            const db = firebase.firestore();
+            const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id);
+            unsubscribe = ref.onSnapshot((doc) => {
+                console.log(doc.id, doc.data());
+                const data = doc.data();
+                setMemo({
+                    id: doc.id,
+                    bodyText: data.bodyText,
+                    updatedAt: data.updatedAt.toDate(),
+                });
+            });
+        }
+        return unsubscribe;
+    },[]);
 
     return (
         <View style={styles.container}>
 
             <View style={styles.memoHeader}>
-                <Text style={styles.memoTitle}>買い物リスト</Text>
-                <Text style={styles.memoDate}>2020年1月1日</Text>
+                <Text style={styles.memoTitle} numberOfLines={1}>{memo && memo.bodyText}</Text>
+                <Text style={styles.memoDate}>{memo && String(memo.updatedAt)}</Text>
             </View>
             <ScrollView style={styles.memoBody}>
                 <Text style={styles.memoText}>
-                買い物リストの内容部分。
-                書体やレイアウトなどを確認するために用います。
-                本文用なので使い方を間違えると不自然に見えることもありますので要注意。
+                    {memo && memo.bodyText}
                 </Text>
             </ScrollView>
             <CircleButton 
@@ -39,6 +59,9 @@ export default function MemoDetailScreen (props) {
 
 //画面移動の際は、propsでnavigationを受け取り、onPressをも用いてルーティングのような形で画面を移動させている。
 //具体的には、「navigation.navigate('移動先のscreen名')」と記述する。
+
+//{memo && memo.bodyText}の部分はmemoの部分がfalseやnullではなかった場合にmemo.bodeTextが実行されるという処理。
+//String(memo.upDatedAt)は強制的に文字列として日付を記載する処理。
 
 
 MemoDetailScreen.prototype = {
