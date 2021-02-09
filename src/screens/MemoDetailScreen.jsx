@@ -3,6 +3,9 @@ import { shape, string} from 'prop-types';
 import {View, ScrollView,Text, StyleSheet} from 'react-native';
 import CircleButton from '../components/CircleButton';
 import firebase from 'firebase';
+import {dateToString} from '../utils';
+
+//indexファイルはインポート時にファイル名を指定する必要がなく、ディレクトリの指定だけで関数を読み込める。
 
 export default function MemoDetailScreen (props) {
     const {navigation, route} = props;
@@ -37,7 +40,7 @@ export default function MemoDetailScreen (props) {
 
             <View style={styles.memoHeader}>
                 <Text style={styles.memoTitle} numberOfLines={1}>{memo && memo.bodyText}</Text>
-                <Text style={styles.memoDate}>{memo && String(memo.updatedAt)}</Text>
+                <Text style={styles.memoDate}>{memo && dateToString(memo.updatedAt)}</Text>
             </View>
             <ScrollView style={styles.memoBody}>
                 <Text style={styles.memoText}>
@@ -62,6 +65,8 @@ export default function MemoDetailScreen (props) {
 
 //{memo && memo.bodyText}の部分はmemoの部分がfalseやnullではなかった場合にmemo.bodeTextが実行されるという処理。
 //String(memo.upDatedAt)は強制的に文字列として日付を記載する処理。
+//日付をフォーマットするには以下のライブラリを使用する。
+//「npm show date-fns」「npm install date-fns 」
 
 
 MemoDetailScreen.prototype = {

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View ,TouchableOpacity,Alert,FlatList} from 'react-na
 import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import { shape, string, instanceOf, arrayOf } from 'prop-types';
+import {dateToString} from '../utils';
 
 export default function MemoList (props) {
     const { memos } = props;
@@ -17,7 +18,7 @@ export default function MemoList (props) {
                 >
                 <View>
                     <Text style={styles.memoListItemTitle} numberOfLines={1}>{item.bodyText}</Text>
-                    <Text style={styles.memoListItemDate}>{String(item.updatedAt)}</Text>
+                    <Text style={styles.memoListItemDate}>{dateToString(item.updatedAt)}</Text>
                 </View>
                 <TouchableOpacity onPress={()=>{Alert.alert('deleted');}}>
                     <Feather name="x" size={32} color="#B0B0B0"/>
