@@ -50,7 +50,7 @@ export default function MemoDetailScreen (props) {
             <CircleButton 
                 style={{top :60, buttom:'auto'}} 
                 name="edit-2"
-                onPress={()=> {navigation.navigate('MemoEdit');}}
+                onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, bodyText: memo.bodyText });}}
                 />
         </View>
     );
@@ -67,6 +67,9 @@ export default function MemoDetailScreen (props) {
 //String(memo.upDatedAt)は強制的に文字列として日付を記載する処理。
 //日付をフォーマットするには以下のライブラリを使用する。
 //「npm show date-fns」「npm install date-fns 」
+
+//onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, bodyText: memo.bodyText });} の部分でボタンが押されたらMemoEditに接続するとともに、idとbodyTextを渡している。
+//MemoEditScreenでデータを更新した直後にも、この画面に変更後のデータが反映されるのは、snapshotでデータを監視している為。
 
 
 MemoDetailScreen.prototype = {
