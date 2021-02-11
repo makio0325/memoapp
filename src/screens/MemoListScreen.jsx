@@ -1,11 +1,11 @@
 import React, {useEffect,useState} from 'react';
-import {View , StyleSheet, Alert} from 'react-native';
+import {View , StyleSheet, Alert , Text} from 'react-native';
 import firebase from 'firebase';
 
 import MemoList from '../components/MemoList';
 import CircleButton from '../components/CircleButton';
 import LogOutButton from '../components/LogOutButton';
-
+import Button from '../components/Button';
 
 
 export default function MemoListScreen(props){
@@ -59,6 +59,23 @@ export default function MemoListScreen(props){
 //さらにに入れていく配列をuserMemos.pushの部分で1つずつ指定している。
 //forEachが終わった後にsetMemosをuserMemosを引数として実行し、stateを更新している。
 
+    if (memos.length === 0) {
+        return (
+            <View style={emptyStyles.container}>
+                <View style={emptyStyles.inner}>
+                    <Text style={emptyStyles.title}>最初のメモを作成してみましょう！</Text>
+                    <Button 
+                    label="新規作成" 
+                    onPress={() => {navigation.navigate('MemoCreate');}}
+                    style={emptyStyles.button}
+                    />
+                </View>
+            </View>
+        );
+    }
+
+
+//memosが0件だった時に上記の表示が出る。
 
     return (
 
@@ -78,4 +95,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F0F4F8'
     }
+});
+
+const emptyStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inner: {
+        justifyContent: 'center',
+        alignItems: 'center',   
+    },
+    title: {
+        fontSize: 18,
+        marginBottom: 24,
+    },
+    button:{
+        alignSelf: 'center',
+    },
+    
 });
