@@ -4,28 +4,50 @@ import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import { shape, string, instanceOf, arrayOf } from 'prop-types';
 import {dateToString} from '../utils';
+import firebase from 'firebase';
 
 export default function MemoList (props) {
     const { memos } = props;
     const navigation = useNavigation();
+
+    function deleteMemo (id) {
+        const { currentUser } = firebase.auth(); //ログイン中ユーザーの確認
+        if ( currentUser ) {
+            const db = firebase.firestore(); //dbを定義
+            const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id); //リファレンスを作成(ドキュメントidを指定)
+            Alert.alert('メモを削除します。','よろしいですか？',[ 
+                {
+                    text: 'キャンセル',   //Andoroid側ではネガティブな方を先に配置するというルールがあるので、先にキャンセルを記載。
+                    onPress: () => {},
+                },
+                {
+                    text: '削除する',
+                    style: 'destructive',   //破壊的な処理を実行する時のスタイル。文字が赤くなる。
+                    onPress: () => {
+                        ref.delete().catch(() => { Alert.alert('削除に失敗しました');})
+                    },
+                }
+            ]);
+        }
+    }
 
     function renderItem ({item}) {
         return(
             <TouchableOpacity 
                 
                 style={styles.memoListItem}
-                onPress={()=>{navigation.navigate('MemoDetail',{id: item.id});}}
+                onPress={() => {navigation.navigate('MemoDetail',{id: item.id});}}
                 >
                 <View>
                     <Text style={styles.memoListItemTitle} numberOfLines={1}>{item.bodyText}</Text>
                     <Text style={styles.memoListItemDate}>{dateToString(item.updatedAt)}</Text>
                 </View>
-                <TouchableOpacity onPress={()=>{Alert.alert('deleted');}}>
+                <TouchableOpacity onPress={ () => {deleteMemo(item.id);}}>
                     <Feather name="x" size={32} color="#B0B0B0"/>
                 </TouchableOpacity>
             </TouchableOpacity>
             
-        )
+        );
     }
 
 //テキストのタイトル部分は、何もプロパティを設定しないと、入力した文字全てが表示されてしまうが、numberOfLines={1}と書いて表示される行数をしているすることでそれを回避することが出来る。
