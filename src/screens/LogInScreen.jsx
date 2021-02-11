@@ -3,11 +3,13 @@ import {Text, TextInput, View ,StyleSheet,TouchableOpacity,Alert} from 'react-na
 import firebase from 'firebase';
 
 import Button from '../components/Button'
+import Loading from '../components/Loading';
 
 export default function LogInScreen (props){
     const {navigation} = props;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(()=>{
         const unsubscribe = firebase.auth().onAuthStateChanged((user)=>{
@@ -16,6 +18,8 @@ export default function LogInScreen (props){
                     index: 0,
                     routes: [{name: 'MemoList'}],
                 });
+            } else {
+                setLoading(false);
             }
         });
         return unsubscribe;
@@ -30,6 +34,7 @@ export default function LogInScreen (props){
 //今回はユーザーのログイン状態監視処理をキャンセルしている。(MemoListに画面が移った後はログイン情報を監視する必要が無いため)
 
     function handlePress(){
+        setLoading(true);
         firebase.auth().signInWithEmailAndPassword(email,password)
             .then((userCredential) => {
                 const {user} = userCredential;
@@ -37,20 +42,22 @@ export default function LogInScreen (props){
                 navigation.reset({
                     index: 0,
                     routes: [{name: 'MemoList'}],
-                    });
-            }
-
-            )
+                });
+            })
             .catch((error) => {
                 Alert.alert(error.code);
-            }
-
-            );
-        
+            })
+            .then(() => {
+                setLoading(false);
+            })        
     }
+
+    //今回はsetLoadingの初期値はtrue(ローディングが表示される)状態になっている。
+    //handlePressが実行された時(この場合はsubmitボタンが押された時)もLoadingが発生し、それが成功しても失敗してもLoadingをfolseにするように表示している。
 
     return (
         <View style={styles.container}>
+            <Loading isLoading={isLoading} />
             <View style={styles.inner}>
 
                 <Text style={styles.title}>Log In</Text>
