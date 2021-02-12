@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import {Text, TextInput, View ,StyleSheet,TouchableOpacity,Alert} from 'react-native';
+import React, { useState } from 'react';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import firebase from 'firebase';
-
 import Button from '../components/Button'
 import {translateErrors} from '../utils';
 
@@ -9,7 +8,6 @@ export default function SignUpScreen (props){
     const {navigation} = props;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
 
 function handelePress(){
         firebase.auth().createUserWithEmailAndPassword(email,password)
