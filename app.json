@@ -18,9 +18,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,    
+      "bundleIdentifier": "jp.makio.memoapp",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package":"jp.makio.memoapp",
+      "versonCode": 1,
+      "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon_adaptive_foreground.png",
         "backgroundImage": "./assets/icon_adaptive_background.png"
@@ -31,3 +36,6 @@
     }
   }
 }
+
+//"supportsTablet" タブレット設定。今回は不要。
+//bundleIdentifier アプリの識別子。通常はドメイン逆にしたものを使用するが今回は別のもので代用。
