@@ -3,7 +3,7 @@
     "name": "memoapp",
     "slug": "memoapp",
     "version": "1.0.0",
-    "privacy": "unliseted",
+    "privacy": "unlisted",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,12 +19,12 @@
     ],
     "ios": {
       "supportsTablet": false,    
-      "bundleIdentifier": "jp.makio.memoapp",
+      "bundleIdentifier": "jp.makio-memoapp",
       "buildNumber": "1.0.0"
     },
     "android": {
       "package":"jp.makio.memoapp",
-      "versonCode": 1,
+      "versionCode": 1,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon_adaptive_foreground.png",

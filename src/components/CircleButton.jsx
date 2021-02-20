@@ -4,14 +4,13 @@ import {string ,shape, func} from 'prop-types';
 import { Feather } from '@expo/vector-icons'; 
 
 export default function CircleButton (props){
-    const {style ,name,size, color , onPress} = props;
+  const {style ,name,size, color , onPress} = props;
 
-
-    return(
-        <TouchableOpacity style={[styles.circleButton,style]}　onPress={onPress}>
-            <Feather name={name} size={32} color="white" />
-        </TouchableOpacity>
-    )
+  return(
+    <TouchableOpacity style={[styles.circleButton,style]}　onPress={onPress}>
+      <Feather name={name} size={32} color="white" />
+    </TouchableOpacity>
+  )
 }
 
 //ここでサークルボタンのスタイルをその時に応じて自由に変えられるように、値をpropsで受け取るようにしている。
@@ -26,9 +25,9 @@ export default function CircleButton (props){
 //onPressで渡ってくる値は関数であり、渡す側でその処理を指定することで様々なアクションを表現している。
 
 CircleButton.prototype = {
-    style: shape(),
-    name: string.isRequired,
-    onPress: func,
+  style: shape(),
+  name: string.isRequired,
+  onPress: func,
 }
 
 CircleButton.defaultProps = {
@@ -37,28 +36,28 @@ CircleButton.defaultProps = {
 }
 
 const styles = StyleSheet.create({
-    circleButton:{
-        backgroundColor: '#4BA441',
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        right: 40,
-        bottom:40,
-        shadowColor: '#000000',
-        textShadowOffset: {width: 0, height: 8},
-        shadowOpacity: 0.25,
-        shadowRadius: 8,
-        elevation: 8,
-        //shadowプロパティはiOS専用で、elevationはAnd専用のプロパティ。
-        },
-    
-    circleButtonLabel:{
-        color: '#ffffff',
-        fontSize: 40,
-        lineHeight:40, 
-    }
-    
+  circleButton:{
+    backgroundColor: '#4BA441',
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 40,
+    bottom:40,
+    shadowColor: '#000000',
+    textShadowOffset: {width: 0, height: 8},
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
+    //shadowプロパティはiOS専用で、elevationはAnd専用のプロパティ。
+    },
+  
+  circleButtonLabel:{
+    color: '#ffffff',
+    fontSize: 40,
+    lineHeight:40, 
+  }
+  
 });

@@ -3,13 +3,12 @@ import {Text, StyleSheet,TouchableOpacity} from 'react-native';
 import {func, shape, string} from 'prop-types';
 
 export default function Button (props) {
-    const {label,onPress,style} = props;
-
-    return (
-        <TouchableOpacity style={[styles.buttonContainer,style]}>
-            <Text style={styles.buttonLabel} onPress={onPress}>{label}</Text>
-        </TouchableOpacity>
-    );
+  const {label,onPress,style} = props;
+  return (
+    <TouchableOpacity style={[styles.buttonContainer,style]}>
+      <Text style={styles.buttonLabel} onPress={onPress}>{label}</Text>
+    </TouchableOpacity>
+  );
 } 
 
 //ここではpropsでスタイルも変更できるようになっている。
@@ -18,31 +17,30 @@ export default function Button (props) {
 
 
 Button.prototype = {
-    label:string.isRequired,
-    onPress: func,
-    style: shape(),
+  label:string.isRequired,
+  onPress: func,
+  style: shape(),
 };
 
 Button.defaultProps = {
-    onPress: null,
-    style: null,
+  onPress: null,
+  style: null,
 }
 
 const styles = StyleSheet.create({
 
-    buttonContainer: {
-        backgroundColor: '#4BA441',
-        borderRadius: 4,
-        alignSelf: 'flex-start',
-        marginBottom: 24,
-    },
-
-    buttonLabel: {
-        fontSize: 16,
-        lineHeight: 32,
-        paddingVertical: 8,
-        paddingHorizontal: 32,
-        color: '#FFFFFF',
-    },
+  buttonContainer: {
+    backgroundColor: '#4BA441',
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginBottom: 24,
+  },
+  buttonLabel: {
+    fontSize: 16,
+    lineHeight: 32,
+    paddingVertical: 8,
+    paddingHorizontal: 32,
+    color: '#FFFFFF',
+  },
 
 })

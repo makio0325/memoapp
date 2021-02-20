@@ -6,45 +6,41 @@ import CircleButton from '../components/CircleButton';
 import KeyboardSafeView from '../components/KeyboardSafeView'
 
 export default function MemoCreateScreen(props) {
-    const {navigation} = props;
-    const [bodyText, setBodyText] = useState();
-
-    function handlePress() {
-        const { currentUser } = firebase.auth();
-        const db = firebase.firestore();
-        const ref = db.collection(`users/${currentUser.uid}/memos`);
-        ref.add({
-            bodyText: bodyText,
-            updatedAt: new Date(),
-        })
-            .then((docRef) =>{
-                console.log('Created!', docRef.id);
-                navigation.goBack();
-            })
-            .catch((error) => {
-                console.log('Error'), error;
-            });
-
-        
-    }
-
-    return (
-        <KeyboardSafeView style={styles.container} >
-            <View style={styles.inputContainer}>
-                <TextInput 
-                    value={bodyText} 
-                    multiline 
-                    style={styles.input}
-                    onChangeText={ (text)=> { setBodyText(text);}}
-                    autoFocus
-                />
-            </View>
-            <CircleButton 
-                name="check"
-                onPress={handlePress}
-                />
-        </KeyboardSafeView>
-    );
+  const {navigation} = props;
+  const [bodyText, setBodyText] = useState();
+  function handlePress() {
+    const { currentUser } = firebase.auth();
+    const db = firebase.firestore();
+    const ref = db.collection(`users/${currentUser.uid}/memos`);
+    ref.add({
+      bodyText: bodyText,
+      updatedAt: new Date(),
+    })
+      .then(() =>{
+          navigation.goBack();
+      })
+      .catch((error) => {
+          console.log('Error'), error;
+      });
+    
+  }
+  return (
+    <KeyboardSafeView style={styles.container} >
+      <View style={styles.inputContainer}>
+        <TextInput 
+          value={bodyText} 
+          multiline 
+          style={styles.input}
+          onChangeText={ (text)=> { setBodyText(text);}}
+          autoFocus
+        />
+      </View>
+      <CircleButton 
+        name="check"
+        onPress={handlePress}
+        />
+    </KeyboardSafeView>
+  );
 }
 
 //KeyboardAvoidingViewで全体を囲むことで、keyboardが開いた時に、自動的にコンポーネントを大きさを調節してくれるようになっている。
@@ -65,20 +61,20 @@ export default function MemoCreateScreen(props) {
 //その状態でデータ保存(add)を行うので任意のデータを追加出来る、という流れ。
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-    },
-    inputContainer: {
-        paddingHorizontal: 27,
-        paddingVertical: 32,
-        flex:1,
-    },
-    input: {
-        flex:1,
-        textAlignVertical: 'top',
-        fontSize: 16,
-        lineHeight: 24,
-    },
+  container: {
+    flex:1,
+  },
+  inputContainer: {
+    paddingHorizontal: 27,
+    paddingVertical: 32,
+    flex:1,
+  },
+  input: {
+    flex:1,
+    textAlignVertical: 'top',
+    fontSize: 16,
+    lineHeight: 24,
+  },
 });
 
 //この画面をシミュレータでレンダリングしている時に、I/Oからtoggle kebordを選ぶと、タイプが出来るようになる。

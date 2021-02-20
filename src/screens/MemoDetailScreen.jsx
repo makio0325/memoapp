@@ -8,54 +8,50 @@ import {dateToString} from '../utils';
 //indexファイルはインポート時にファイル名を指定する必要がなく、ディレクトリの指定だけで関数を読み込める。
 
 export default function MemoDetailScreen (props) {
-    const {navigation, route} = props;
-    const {id} = route.params;
-    const [memo, setMemo] = useState(null);
+  const {navigation, route} = props;
+  const {id} = route.params;
+  const [memo, setMemo] = useState(null);
 
-    //routeは前の画面(MemoList)からidを受け取るためのもの。
-    //routeの中にはparamsが入っており、更にその中にidが入っている。
-
-
-    useEffect (() => {
-        const {currentUser} = firebase.auth();
-        let unsubscribe =() => {};
-        if (currentUser) {
-            const db = firebase.firestore();
-            const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id);
-            unsubscribe = ref.onSnapshot((doc) => {
-                console.log(doc.id, doc.data());
-                const data = doc.data();
-                setMemo({
-                    id: doc.id,
-                    bodyText: data.bodyText,
-                    updatedAt: data.updatedAt.toDate(),
-                });
-            });
-        }
-        return unsubscribe;
-    },[]);
-
-    return (
-        <View style={styles.container}>
-
-            <View style={styles.memoHeader}>
-                <Text style={styles.memoTitle} numberOfLines={1}>{memo && memo.bodyText}</Text>
-                <Text style={styles.memoDate}>{memo && dateToString(memo.updatedAt)}</Text>
-            </View>
-            <ScrollView>
-                <View style={styles.memoBodyInner}>
-                    <Text style={styles.memoText}>
-                        {memo && memo.bodyText}
-                    </Text>
-                </View>
-            </ScrollView>
-            <CircleButton 
-                style={{top :60, buttom:'auto'}} 
-                name="edit-2"
-                onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, bodyText: memo.bodyText });}}
-                />
+//routeは前の画面(MemoList)からidを受け取るためのもの。
+//routeの中にはparamsが入っており、更にその中にidが入っている。
+  useEffect (() => {
+    const {currentUser} = firebase.auth();
+    let unsubscribe =() => {};
+    if (currentUser) {
+      const db = firebase.firestore();
+      const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id);
+      unsubscribe = ref.onSnapshot((doc) => {
+        console.log(doc.id, doc.data());
+        const data = doc.data();
+        setMemo({
+          id: doc.id,
+          bodyText: data.bodyText,
+          updatedAt: data.updatedAt.toDate(),
+        });
+      });
+    }
+    return unsubscribe;
+  },[]);
+  return (
+    <View style={styles.container}>
+      <View style={styles.memoHeader}>
+        <Text style={styles.memoTitle} numberOfLines={1}>{memo && memo.bodyText}</Text>
+        <Text style={styles.memoDate}>{memo && dateToString(memo.updatedAt)}</Text>
+      </View>
+      <ScrollView>
+        <View style={styles.memoBodyInner}>
+          <Text style={styles.memoText}>
+            {memo && memo.bodyText}
+          </Text>
         </View>
-    );
+      </ScrollView>
+      <CircleButton 
+        style={{top :60, buttom:'auto'}} 
+        name="edit-2"
+        onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, bodyText: memo.bodyText });}}
+        />
+    </View>
+  );
 }
 
 //本文の部分だけ普通のViewではなく、ScrollViewを使っている。
@@ -75,49 +71,41 @@ export default function MemoDetailScreen (props) {
 
 
 MemoDetailScreen.prototype = {
-    route: shape({
-        params: shape({ id: string}),
-    }).isRequired,
+  route: shape({
+    params: shape({ id: string}),
+  }).isRequired,
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        borderColor:'#ffffff',
-
-    },
-
-    memoHeader: {
-        backgroundColor: '#4BA441',
-        height: 96,
-        justifyContent: 'center',
-        paddingVertical: 24,
-        paddingHorizontal: 19,
-    },
-
-    memoTitle: {
-        color: '#ffffff',
-        fontSize: 20,
-        lineHeight: 32,
-        fontWeight: 'bold',
-
-    },
-
-    memoDate: {
-        color: '#ffffff',
-        fontSize: 12,
-        lineHeight: 16,
-    },
-
-    memoBodyInner:{
-        paddingHorizontal:27,
-        paddingTop: 32,
-        paddingBottom: 80,
-    },
-
-    memoText:{
-        fontSize: 16,
-        lineHeight: 24,
-    },
-
+  container: {
+    flex:1,
+    borderColor:'#ffffff',
+  },
+  memoHeader: {
+    backgroundColor: '#4BA441',
+    height: 96,
+    justifyContent: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 19,
+  },
+  memoTitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    lineHeight: 32,
+    fontWeight: 'bold',
+  },
+  memoDate: {
+    color: '#ffffff',
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  memoBodyInner:{
+    paddingHorizontal:27,
+    paddingTop: 32,
+    paddingBottom: 80,
+  },
+  memoText:{
+    fontSize: 16,
+    lineHeight: 24,
+  },
 })

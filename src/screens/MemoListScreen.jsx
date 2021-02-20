@@ -4,52 +4,63 @@ import firebase from 'firebase';
 
 import MemoList from '../components/MemoList';
 import CircleButton from '../components/CircleButton';
-import LogOutButton from '../components/LogOutButton';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
+import HeaderRightButton from '../components/HeaderRightButton';
 
 
 export default function MemoListScreen(props){
-    const {navigation} = props;
-    const [memos, setMemos] =useState([]);
-    const [isLoading, setLoading] = useState(false);
+  const {navigation} = props;
+  const [memos, setMemos] =useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <LogOutButton />,
-        });
-    });
-
-    useEffect(() => {
+  useEffect(() => {
+    setLoading(true);
+    const cleanupFuncs = {
+      auth: () => {},
+      memos: () => {},
+    };
+    cleanupFuncs.auth = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
         const db = firebase.firestore();
-        const { currentUser } = firebase.auth();
-        let unsubscribe = () => {};
-        if (currentUser) {
-            setLoading(true);
-
-            const ref = db.collection(`users/${currentUser.uid}/memos`).orderBy('updatedAt', 'desc');
-            unsubscribe = ref.onSnapshot((snapshot) => {
-                const userMemos = [];
-                snapshot.forEach((doc) => {
-                    console.log(doc.id,doc.data());
-                    const data = doc.data();
-
-                    userMemos.push({
-                        id: doc.id,
-                        bodyText: data.bodyText,
-                        updatedAt: data.updatedAt.toDate(),
-                    })
-                });
-                setMemos(userMemos);
-                setLoading(false);
-            },(error) => {
-                setLoading(false);
-                Alert,alert('ログアウトしました。');
+        const ref = db.collection(`users/${user.uid}/memos`).orderBy('updatedAt', 'desc');
+        cleanupFuncs.memos = ref.onSnapshot((snapshot) => {
+          const userMemos = [];
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            userMemos.push({
+              id: doc.id,
+              bodyText: data.bodyText,
+              updatedAt: data.updatedAt.toDate(),
             });
-        }
-        return unsubscribe;
-    },[]);
+          });
+          setMemos(userMemos);
+          setLoading(false);
+        }, () => {
+          setLoading(false);
+        });
+        // ユーザーが存在したら会員登録ボタンかログアウトボタンを表示
+        // 会員登録ボタン：匿名ユーザー
+        // ログアウトボタン：メアド登録済ユーザー
+        navigation.setOptions({
+          headerRight: () => (
+            <HeaderRightButton currentUser={user} cleanupFuncs={cleanupFuncs} />
+          ),
+        });
+      } else {
+        // 匿名ログイン（firebaseの Authentication > Sign-in method から有効にする必要があります）
+        firebase.auth().signInAnonymously()
+          .catch(() => {
+            Alert.alert('エラー', 'アプリを再起動してください');
+          })
+          .then(() => { setLoading(false); });
+      }
+    });
+    return () => {
+      cleanupFuncs.auth();
+      cleanupFuncs.memos();
+    };
+  }, []);
 
 //navigation.setOptionsでログアウトボタンを設定しており、オプションの一部として、ログアウトボタンを指定している。
 //headerRight以降は元々は、「() => {return <LogOutButton />}」となるが、省略した書き方になっている。
@@ -64,35 +75,35 @@ export default function MemoListScreen(props){
 //さらにに入れていく配列をuserMemos.pushの部分で1つずつ指定している。
 //forEachが終わった後にsetMemosをuserMemosを引数として実行し、stateを更新している。
 
-    if (memos.length === 0) {
-        return (
-            <View style={emptyStyles.container}>
-                <Loading isLoading={isLoading} />
-                <View style={emptyStyles.inner}>
-                    <Text style={emptyStyles.title}>最初のメモを作成してみましょう！</Text>
-                    <Button 
-                    label="新規作成" 
-                    onPress={() => {navigation.navigate('MemoCreate');}}
-                    style={emptyStyles.button}
-                    />
-                </View>
-            </View>
-        );
-    }
+  if (memos.length === 0) {
+    return (
+      <View style={emptyStyles.container}>
+        <Loading isLoading={isLoading} />
+        <View style={emptyStyles.inner}>
+          <Text style={emptyStyles.title}>最初のメモを作成してみましょう！</Text>
+          <Button 
+          label="新規作成" 
+          onPress={() => {navigation.navigate('MemoCreate');}}
+          style={emptyStyles.button}
+          />
+        </View>
+      </View>
+    );
+  }
 
 
 //memosが0件だった時に上記の表示が出る。
 //メモが0件の時、通常のリスト表示の際にもローディングアイコンが表示されるようになっている。
 //
 
-    return (
+  return (
 
-    <View style={styles.container}>
-        <Loading isLoading={isLoading} />
-        <MemoList memos={memos}/>
-        <CircleButton name="plus" onPress={()=> {navigation.navigate('MemoCreate');}}/>
-    </View>
-    );
+  <View style={styles.container}>
+    <Loading isLoading={isLoading} />
+    <MemoList memos={memos}/>
+    <CircleButton name="plus" onPress={()=> {navigation.navigate('MemoCreate');}}/>
+  </View>
+  );
 }
 
 //returnより上の処理で更新されている状態のmemosを取得しているので、それをMemoListに渡している。
@@ -100,28 +111,27 @@ export default function MemoListScreen(props){
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F0F4F8'
-    }
+  container: {
+    flex: 1,
+    backgroundColor: '#F0F4F8'
+  }
 });
 
 const emptyStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    inner: {
-        justifyContent: 'center',
-        alignItems: 'center',   
-    },
-    title: {
-        fontSize: 18,
-        marginBottom: 24,
-    },
-    button:{
-        alignSelf: 'center',
-    },
-    
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inner: {
+    justifyContent: 'center',
+    alignItems: 'center',   
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 24,
+  },
+  button:{
+    alignSelf: 'center',
+  },
 });
