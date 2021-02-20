@@ -36,7 +36,7 @@ export default function App() {
         screenOptions={{
           headerStyle: {backgroundColor :'#4BA441'},
           headerTitleStyle:{color: '#ffffff'},
-          headerTitle: 'memo App',
+          headerTitle: 'memoapp X',
           headerTintColor: '#ffffff',
           headerBackTitle: 'Back',
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -44,21 +44,18 @@ export default function App() {
           gestureDirection: 'horizontal',
         }}
         >
-
         <Stack.Screen 
           name="SignUp" 
           component={SignUpScreen}
           options = {{
             cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
             }}/>
-
         <Stack.Screen 
           name="LogIn" 
           component={LogInScreen}
           options = {{
             cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
             }}/>
-
         <Stack.Screen 
           name="MemoList" 
           component={MemoListScreen}
