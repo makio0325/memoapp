@@ -9,7 +9,8 @@ import KeyboardSafeView from '../components/KeyboardSafeView'
 
 export default function MemoEditScreen(props) {
   const {navigation ,route} = props;
-  const { id, bodyText } = route.params;
+  const { id, titleText, bodyText } = route.params;
+  const [title, setTitle] = useState(titleText);
   const [body, setBody] = useState(bodyText);
   function handlePress () {
     const {currentUser} = firebase.auth();
@@ -17,6 +18,7 @@ export default function MemoEditScreen(props) {
       const db = firebase.firestore();
       const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id);
       ref.set({
+        titleText: title,
         bodyText: body,
         updatedAt: new Date(),
       },{ merge: true })
@@ -31,11 +33,20 @@ export default function MemoEditScreen(props) {
   }
   return (
     <KeyboardSafeView style={styles.container} behavior='height'>
-      <View style={styles.inputContainer}>
+      <View style={styles.titleContainer}>
+        <TextInput 
+            value={title} 
+            multiline 
+            style={styles.inputTitleText}
+            onChangeText={(text) => {setTitle(text);}}
+        />
+      </View>
+      
+      <View style={styles.bodyContainer}>
         <TextInput 
           value={body} 
           multiline 
-          style={styles.input}
+          style={styles.inputBodyText}
           onChangeText={(text) => {setBody(text);}}
         />
       </View>
@@ -75,6 +86,28 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
   },
+
+  titleContainer:{
+    paddingVertical: 16,
+    backgroundColor: '#4BA441',
+  },
+  inputTitleText:{
+    fontSize: 24,
+    paddingHorizontal: 27,
+    color: '#FFFFFF',
+  },
+  bodyContainer:{
+    paddingHorizontal: 27,
+    paddingVertical: 12,
+  },
+  inputBodyText: {
+    textAlignVertical: 'top',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+
+
+
   inputContainer: {
     flex:1,
   },

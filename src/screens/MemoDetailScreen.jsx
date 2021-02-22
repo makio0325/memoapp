@@ -25,6 +25,7 @@ export default function MemoDetailScreen (props) {
         const data = doc.data();
         setMemo({
           id: doc.id,
+          titleText: data.titleText,
           bodyText: data.bodyText,
           updatedAt: data.updatedAt.toDate(),
         });
@@ -35,7 +36,7 @@ export default function MemoDetailScreen (props) {
   return (
     <View style={styles.container}>
       <View style={styles.memoHeader}>
-        <Text style={styles.memoTitle} numberOfLines={1}>{memo && memo.bodyText}</Text>
+        <Text style={styles.memoTitle} >{memo && memo.titleText}</Text>
         <Text style={styles.memoDate}>{memo && dateToString(memo.updatedAt)}</Text>
       </View>
       <ScrollView>
@@ -48,7 +49,7 @@ export default function MemoDetailScreen (props) {
       <CircleButton 
         style={{top :60, buttom:'auto'}} 
         name="edit-2"
-        onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, bodyText: memo.bodyText });}}
+        onPress={()=> {navigation.navigate('MemoEdit',{ id:memo.id, titleText: memo.titleText, bodyText: memo.bodyText });}}
         />
     </View>
   );

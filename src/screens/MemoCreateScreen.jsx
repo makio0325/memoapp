@@ -7,34 +7,48 @@ import KeyboardSafeView from '../components/KeyboardSafeView'
 
 export default function MemoCreateScreen(props) {
   const {navigation} = props;
+  const [titleText, setTitleText] = useState();
   const [bodyText, setBodyText] = useState();
   function handlePress() {
     const { currentUser } = firebase.auth();
     const db = firebase.firestore();
     const ref = db.collection(`users/${currentUser.uid}/memos`);
     ref.add({
+      titleText: titleText,
       bodyText: bodyText,
       updatedAt: new Date(),
     })
       .then(() =>{
-          navigation.goBack();
+        navigation.goBack();
       })
       .catch((error) => {
-          console.log('Error'), error;
+        console.log('Error'), error;
       });
     
   }
   return (
     <KeyboardSafeView style={styles.container} >
-      <View style={styles.inputContainer}>
+      <View style={styles.titleContainer}>
+        <TextInput 
+            value={titleText} 
+            style={styles.inputTitleText}
+            onChangeText={ (text)=> { setTitleText(text);}}
+            autoFocus
+            placeholder="タイトル"
+          />
+      </View>
+
+      <View style={styles.bodyContainer}>
         <TextInput 
           value={bodyText} 
           multiline 
-          style={styles.input}
+          style={styles.inputBodyText}
           onChangeText={ (text)=> { setBodyText(text);}}
           autoFocus
+          placeholder="本文"
         />
       </View>
+
       <CircleButton 
         name="check"
         onPress={handlePress}
@@ -64,13 +78,23 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
   },
-  inputContainer: {
-    paddingHorizontal: 27,
-    paddingVertical: 32,
-    flex:1,
+
+  titleContainer:{
+    paddingVertical: 16,
+    backgroundColor: '#4BA441',
   },
-  input: {
-    flex:1,
+
+  inputTitleText:{
+    fontSize: 24,
+    paddingHorizontal: 27,
+    color: '#FFFFFF',
+  },
+
+  bodyContainer:{
+    paddingHorizontal: 27,
+    paddingVertical: 12,
+  },
+  inputBodyText: {
     textAlignVertical: 'top',
     fontSize: 16,
     lineHeight: 24,

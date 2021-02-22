@@ -30,6 +30,7 @@ export default function MemoListScreen(props){
             const data = doc.data();
             userMemos.push({
               id: doc.id,
+              titleText: data.titleText,
               bodyText: data.bodyText,
               updatedAt: data.updatedAt.toDate(),
             });
