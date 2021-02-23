@@ -1,4 +1,5 @@
 import React from 'react';
+import { LogBox } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator,CardStyleInterpolators} from '@react-navigation/stack';
 import firebase from 'firebase';
@@ -27,6 +28,10 @@ if (firebase.apps.length === 0 ) {
 //initializeAppは初期化処理。既に初期化されていれば何もしない。
 
 const Stack = createStackNavigator();
+LogBox.ignoreAllLogs(['Setting a timer']);
+
+//LogBoxは不要なアラートを無視するために使える。
+//無視するアラートを配列に入れて使用する。
 
 export default function App() {
   return (
