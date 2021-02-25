@@ -28,7 +28,7 @@ if (firebase.apps.length === 0 ) {
 //initializeAppは初期化処理。既に初期化されていれば何もしない。
 
 const Stack = createStackNavigator();
-LogBox.ignoreAllLogs(['Setting a timer']);
+LogBox.ignoreLogs(['Setting a timer for a long period of time']);
 
 //LogBoxは不要なアラートを無視するために使える。
 //無視するアラートを配列に入れて使用する。

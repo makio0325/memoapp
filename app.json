@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "memoapp X",
-    "slug": "memoapp X",
+    "name": "memoappX",
+    "slug": "memoappX",
     "version": "1.0.1",
     "privacy": "unlisted",
     "orientation": "portrait",
@@ -23,7 +23,7 @@
       "buildNumber": "1.0.1"
     },
     "android": {
-      "package":"jp.makio.memoapp",
+      "package":"jp.makio.memoappX",
       "versionCode": 2,
       "permissions": [],
       "adaptiveIcon": {
