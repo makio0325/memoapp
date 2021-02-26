@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": false,    
-      "bundleIdentifier": "jp.makio-memoappX",
+      "bundleIdentifier": "jp.makio-memoapp",
       "buildNumber": "1.0.2"
     },
     "android": {
