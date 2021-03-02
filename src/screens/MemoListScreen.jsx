@@ -7,6 +7,8 @@ import CircleButton from '../components/CircleButton';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import HeaderRightButton from '../components/HeaderRightButton';
+import Banner from '../components/Banner';
+
 
 
 export default function MemoListScreen(props){
@@ -135,4 +137,8 @@ const emptyStyles = StyleSheet.create({
   button:{
     alignSelf: 'center',
   },
+
+  banner:{
+
+  }
 });
